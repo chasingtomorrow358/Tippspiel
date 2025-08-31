@@ -76,28 +76,46 @@ if now < deadline:
 # Punkteberechnung & Leaderboard-Update
 # -------------------------------
 if st.button("Auswerten"):
-    import sieger  # Datei mit den Siegern
+    import sieger
 
-    # Werte aus den Inputs
-    hmm = [hmme, hmmz, hmmd]
-    hmw = [hmwe, hmwz, hmwd]
-    punkte = 0
+    # Daten aus dem Sheet laden
+    data = sheet.get_all_records()
+    df = pd.DataFrame(data)
 
-    # Punkte 100m Männer
-    for i, val in enumerate(hmm):
-        if val == sieger.ohmm[i]:
-            punkte += 2
-        elif val in sieger.ohmm:
-            punkte += 1
+    if not df.empty and "Name" in df.columns and name in df["Name"].values:
+        # Index der Zeile des Users
+        idx = df.index[df["Name"] == name][0]
+        row = df.loc[idx]
 
-    # Punkte 100m Frauen
-    for i, val in enumerate(hmw):
-        if val == sieger.ohmw[i]:
-            punkte += 2
-        elif val in sieger.ohmw:
-            punkte += 1
+        # Tipps aus dem Sheet nehmen, nicht aus Inputs
+        hmm = [row["100mM1"], row["100mM2"], row["100mM3"]]
+        hmw = [row["100mW1"], row["100mW2"], row["100mW3"]]
 
-    st.success(f"{name}, du hast {punkte} Punkte!")
+        punkte = 0
+
+        # Punkteberechnung 100m Männer
+        for i, val in enumerate(hmm):
+            if val == sieger.ohmm[i]:
+                punkte += 2
+            elif val in sieger.ohmm:
+                punkte += 1
+
+        # Punkteberechnung 100m Frauen
+        for i, val in enumerate(hmw):
+            if val == sieger.ohmw[i]:
+                punkte += 2
+            elif val in sieger.ohmw:
+                punkte += 1
+
+        # Punkte nur in der vorhandenen Zeile aktualisieren
+        row_idx = idx + 2  # Header = 1
+        col_idx = df.columns.get_loc("Punkte") + 1
+        sheet.update_cell(row_idx, col_idx, punkte)
+
+        st.success(f"{name}, du hast {punkte} Punkte!")
+
+    else:
+        st.error("Fehler: Name nicht im Sheet gefunden. Bitte zuerst Tipp abgeben.")
 
     # -------------------------------
     # Nur die Punkte-Zelle aktualisieren
@@ -127,6 +145,7 @@ if not df.empty and "Punkte" in df.columns:
     st.dataframe(leaderboard.sort_values(by="Punkte", ascending=False))
 else:
     st.write("Noch keine Einträge im Leaderboard.")
+
 
 
 
