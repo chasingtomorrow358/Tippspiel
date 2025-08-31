@@ -35,14 +35,26 @@ if now < deadline:
     hmwz = st.text_input("100m Frauen Zweite:")
     hmwd = st.text_input("100m Frauen Dritte:")
 
-    if st.button("Tipp abgeben"):
-        if name.strip() == "" or hmme.strip() == "" or hmmz.strip() == "" or hmmd.strip() == "" or hmwe.strip() == "" or hmwz.strip() == "" or hmwd.strip() == "":
-            st.error("⚠️ Bitte alle Felder ausfüllen!")
-        else:
-            sheet.append_row([name, hmme, hmmz, hmmd, 0])  # Punkte werden später berechnet
-            st.success(f"✅ Danke {name}, dein Tipp wurde gespeichert!")
-else:
-    st.warning("⏰ Die Abgabefrist ist vorbei! Du kannst keine Tipps mehr einreichen.")
+ if st.button("Tipp abgeben"):
+    now = datetime.now()
+
+    if now > deadline:
+        st.error("⏰ Abgabeschluss ist vorbei! Du kannst keine Tipps mehr abgeben.")
+    elif (
+        name.strip() == "" 
+        or hmme.strip() == "" or hmmz.strip() == "" or hmmd.strip() == ""
+        or hmwe.strip() == "" or hmwz.strip() == "" or hmwd.strip() == ""
+    ):
+        st.error("Bitte alle Felder ausfüllen!")
+    else:
+        # Tipps speichern: Männer + Frauen, Punkte=0 als Platzhalter
+        sheet.append_row([
+            name,
+            hmme, hmmz, hmmd,   # 100m Männer
+            hmwe, hmwz, hmwd,   # 100m Frauen
+            0                   # Punkte/ Hier müssen noch die anderen Events hin
+        ])
+        st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
 
 # -------------------------------
 # Punkteberechnung & Leaderboard-Update
@@ -97,9 +109,12 @@ st.subheader("🏅 Leaderboard")
 
 if not df.empty and "Punkte" in df.columns:
     df["Punkte"] = pd.to_numeric(df["Punkte"], errors="coerce")
-    st.dataframe(df.sort_values(by="Punkte", ascending=False))
+    leaderboard = df[["Name", "Punkte"]]  # nur Name + Punkte anzeigen
+    st.dataframe(leaderboard.sort_values(by="Punkte", ascending=False))
 else:
     st.write("Noch keine Einträge im Leaderboard.")
+
+
 
 
 
