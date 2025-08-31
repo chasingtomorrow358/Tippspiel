@@ -16,7 +16,7 @@ sheet = client.open_by_key(st.secrets["gspread"]["sheet_id"]).sheet1
 # -------------------------------
 # Abgabeschluss festlegen
 # -------------------------------
-deadline = datetime(2025, 8, 31, 22, 05)
+deadline = datetime(2025, 8, 31, 22, 5)
 st.title("🏆 VFV Spandau: Das große Tippspiel")
 st.info(f"⏰ Tipps können bis **{deadline.strftime('%d.%m.%Y %H:%M')}** eingereicht werden.")
 
@@ -111,6 +111,7 @@ else:
         st.dataframe(leaderboard)
     else:
         st.write("Noch keine Tipps vorhanden.")
+
 
 
 
