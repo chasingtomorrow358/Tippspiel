@@ -2,6 +2,7 @@ import streamlit as st
 import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+from datetime import datetime
 
 # -------------------------------
 # Google Sheets Setup über Secrets
@@ -11,7 +12,9 @@ scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/au
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 sheet = client.open_by_key(st.secrets["gspread"]["sheet_id"]).sheet1
-
+#Deadline fürs Tippen
+# Abgabeschluss 
+deadline = datetime(2025, 9, 13, 00, 15)
 # -------------------------------
 # App-Titel
 # -------------------------------
@@ -45,7 +48,20 @@ hmwd = st.text_input("100m Frauen Dritte:") #100m Frauen
 #vmwe = st.text_input("100m M S:")
 #vmwz = st.text_input("100m M Z:")
 #vmwd = st.text_input("100m M D:") #400m Frauen
-                                        
+
+
+if st.button("Tipp abgeben"):
+    now = datetime.now()
+
+    if now > deadline:
+        st.error("⏰ Abgabeschluss ist vorbei! Du kannst keine Tipps mehr abgeben.")
+    elif name.strip() == "" or a.strip() == "" or b.strip() == "" or c.strip() == "":
+        st.error("Bitte alle Felder ausfüllen!")
+    else:
+        # Tipp speichern (noch ohne Punkte)
+        sheet.append_row([name, a, b, c])
+        st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+
 # -------------------------------
 # Punkteberechnung & Leaderboard-Update
 # -------------------------------
@@ -143,6 +159,7 @@ if not df.empty and "Punkte" in df.columns:
     st.dataframe(df.sort_values(by="Punkte", ascending=False))
 else:
     st.write("Noch keine Einträge im Leaderboard.")
+
 
 
 
