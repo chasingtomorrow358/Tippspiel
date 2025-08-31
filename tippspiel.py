@@ -50,14 +50,33 @@ if st.button("Tipp abgeben"):
     ):
         st.error("Bitte alle Felder ausfüllen!")
     else:
-        # Tipps speichern: Männer + Frauen, Punkte=0 als Platzhalter
-        sheet.append_row([
-            name,
-            hmme, hmmz, hmmd,   # 100m Männer
-            hmwe, hmwz, hmwd,   # 100m Frauen
-            0                   # Punkte/ Hier müssen noch die anderen Events hin
-        ])
-        st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+        # Bestehende Daten aus Sheet laden
+        data = sheet.get_all_records()
+        df = pd.DataFrame(data)
+
+        if not df.empty and "Name" in df.columns and name in df["Name"].values:
+            # Name existiert → Zeile aktualisieren
+            idx = df.index[df["Name"] == name][0]
+            df.at[idx, "100mM1"] = hmme
+            df.at[idx, "100mM2"] = hmmz
+            df.at[idx, "100mM3"] = hmmd
+            df.at[idx, "100mW1"] = hmwe
+            df.at[idx, "100mW2"] = hmwz
+            df.at[idx, "100mW3"] = hmwd
+            # Punkte bleiben vorerst gleich
+            # Sheet leeren und aktualisieren
+            sheet.clear()
+            sheet.update([df.columns.values.tolist()] + df.values.tolist())
+            st.success(f"{name}, dein Tipp wurde aktualisiert!")
+        else:
+            # Neuer Eintrag
+            sheet.append_row([
+                name,
+                hmme, hmmz, hmmd,   # 100m Männer
+                hmwe, hmwz, hmwd,   # 100m Frauen
+                0                   # Punkte
+            ])
+            st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
 
 # -------------------------------
 # Punkteberechnung & Leaderboard-Update
@@ -116,6 +135,7 @@ if not df.empty and "Punkte" in df.columns:
     st.dataframe(leaderboard.sort_values(by="Punkte", ascending=False))
 else:
     st.write("Noch keine Einträge im Leaderboard.")
+
 
 
 
