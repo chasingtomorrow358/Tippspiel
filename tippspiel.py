@@ -51,19 +51,16 @@ if now < deadline:
             data = sheet.get_all_records()
             df = pd.DataFrame(data)
 
-            # Prüfen, ob Name bereits existiert
             if not df.empty and "Name" in df.columns and name in df["Name"].values:
+                # Zeile aktualisieren
                 idx = df.index[df["Name"] == name][0]
-                df.at[idx, "100mM1"] = hmme
-                df.at[idx, "100mM2"] = hmmz
-                df.at[idx, "100mM3"] = hmmd
-                df.at[idx, "100mW1"] = hmwe
-                df.at[idx, "100mW2"] = hmwz
-                df.at[idx, "100mW3"] = hmwd
-                # Punkte bleiben unverändert
-                values = df.where(pd.notnull(df), None)
-                sheet.clear()
-                sheet.update([values.columns.values.tolist()] + values.values.tolist())
+                row_idx = idx + 2  # Header = 1, df index 0-basiert
+                # Spalten für Tipps
+                tips_columns = ["100mM1", "100mM2", "100mM3", "100mW1", "100mW2", "100mW3"]
+                tips_values = [hmme, hmmz, hmmd, hmwe, hmwz, hmwd]
+                for i, col_name in enumerate(tips_columns):
+                    col_idx = df.columns.get_loc(col_name) + 1  # gspread 1-basiert
+                    sheet.update_cell(row_idx, col_idx, tips_values[i])
                 st.success(f"{name}, dein Tipp wurde aktualisiert!")
             else:
                 # Neuer Eintrag
@@ -81,6 +78,7 @@ if now < deadline:
 if st.button("Auswerten"):
     import sieger  # Datei mit den Siegern
 
+    # Werte aus den Inputs
     hmm = [hmme, hmmz, hmmd]
     hmw = [hmwe, hmwz, hmwd]
     punkte = 0
@@ -101,23 +99,19 @@ if st.button("Auswerten"):
 
     st.success(f"{name}, du hast {punkte} Punkte!")
 
-    # Leaderboard aktualisieren
+    # -------------------------------
+    # Nur die Punkte-Zelle aktualisieren
+    # -------------------------------
     data = sheet.get_all_records()
     df = pd.DataFrame(data)
 
     if not df.empty and "Name" in df.columns and name in df["Name"].values:
         idx = df.index[df["Name"] == name][0]
-        df.at[idx, "Punkte"] = punkte
-        values = df.where(pd.notnull(df), None)
-        sheet.clear()
-        sheet.update([values.columns.values.tolist()] + values.values.tolist())
+        row_idx = idx + 2  # Header = 1
+        col_idx = df.columns.get_loc("Punkte") + 1
+        sheet.update_cell(row_idx, col_idx, punkte)
     else:
-        sheet.append_row([
-            name,
-            hmme, hmmz, hmmd,
-            hmwe, hmwz, hmwd,
-            punkte
-        ])
+        st.error("Fehler: Name nicht im Sheet gefunden. Bitte zuerst Tipp abgeben.")
 
 # -------------------------------
 # Leaderboard anzeigen
@@ -133,15 +127,6 @@ if not df.empty and "Punkte" in df.columns:
     st.dataframe(leaderboard.sort_values(by="Punkte", ascending=False))
 else:
     st.write("Noch keine Einträge im Leaderboard.")
-
-
-
-
-
-
-
-
-
 
 
 
