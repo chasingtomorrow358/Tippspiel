@@ -12,7 +12,8 @@ creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 
 # Öffne das Sheet
-sheet = client.open_by_key(st.secrets["sheet_id"]).sheet1  # sheet_id ebenfalls in Secrets speichern
+sheet = client.open_by_key(st.secrets["gspread"]["sheet_id"]).sheet1
+  # sheet_id ebenfalls in Secrets speichern
 
 st.title("🏆 100m Männer Tippspiel mit Leaderboard")
 
@@ -48,4 +49,5 @@ data = sheet.get_all_records()
 df = pd.DataFrame(data)
 st.subheader("🏅 Leaderboard")
 st.dataframe(df.sort_values(by="Punkte", ascending=False))
+
 
