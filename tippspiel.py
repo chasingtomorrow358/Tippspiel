@@ -2,12 +2,10 @@ import streamlit as st
 import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-import json
 
 # Google Sheets Setup über Streamlit Secrets
-# In den Streamlit Secrets musst du deine gspread Credentials als Dictionary speichern
-gspread_creds = st.secrets["gspread"]
-creds_dict = json.loads(json.dumps(gspread_creds))  # Umwandeln in dict
+# st.secrets["gspread"] ist bereits ein dict, kein JSON
+creds_dict = st.secrets["gspread"]
 
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
@@ -50,7 +48,4 @@ data = sheet.get_all_records()
 df = pd.DataFrame(data)
 st.subheader("🏅 Leaderboard")
 st.dataframe(df.sort_values(by="Punkte", ascending=False))
-
-
-
 
