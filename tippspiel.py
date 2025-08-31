@@ -24,51 +24,9 @@ st.info(f"⏰ Tipps können bis **{deadline.strftime('%d.%m.%Y %H:%M')}** einger
 now = datetime.now()
 
 # -------------------------------
-# TIP-ABGABE MODUS (vor Deadline)
-# -------------------------------
-if now < deadline:
-    st.subheader("Tipps abgeben")
-    name = st.text_input("Dein Name")
-    
-    st.markdown("### 100m Männer")
-    hmme = st.text_input("Sieger:")
-    hmmz = st.text_input("Zweiter:")
-    hmmd = st.text_input("Dritter:")
-
-    st.markdown("### 100m Frauen")
-    hmwe = st.text_input("Siegerin:")
-    hmwz = st.text_input("Zweite:")
-    hmwd = st.text_input("Dritte:")
-
-    if st.button("Tipp abgeben"):
-        if name.strip() == "" or hmme.strip() == "" or hmmz.strip() == "" or hmmd.strip() == "" \
-           or hmwe.strip() == "" or hmwz.strip() == "" or hmwd.strip() == "":
-            st.error("Bitte alle Felder ausfüllen!")
-        else:
-            # Daten aus Sheet holen
-            data = sheet.get_all_records()
-            df = pd.DataFrame(data)
-
-            if not df.empty and "Name" in df.columns and name in df["Name"].values:
-                # Bestehende Zeile aktualisieren
-                idx = df.index[df["Name"] == name][0]
-                row_idx = idx + 2  # Header = 1
-                sheet.update_cell(row_idx, df.columns.get_loc("100mM1")+1, hmme)
-                sheet.update_cell(row_idx, df.columns.get_loc("100mM2")+1, hmmz)
-                sheet.update_cell(row_idx, df.columns.get_loc("100mM3")+1, hmmd)
-                sheet.update_cell(row_idx, df.columns.get_loc("100mW1")+1, hmwe)
-                sheet.update_cell(row_idx, df.columns.get_loc("100mW2")+1, hmwz)
-                sheet.update_cell(row_idx, df.columns.get_loc("100mW3")+1, hmwd)
-            else:
-                # Neue Zeile anfügen
-                sheet.append_row([name, hmme, hmmz, hmmd, hmwe, hmwz, hmwd, 0])  # Punkte=0 als Platzhalter
-
-            st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
-
-# -------------------------------
 # AUSWERTUNG MODUS (nach Deadline)
 # -------------------------------
-else:
+if now >= deadline:
     st.subheader("Auswertung nach Ablauf der Deadline")
     import sieger  # Datei mit den Siegern
 
@@ -112,10 +70,46 @@ else:
     else:
         st.write("Noch keine Tipps vorhanden.")
 
+# -------------------------------
+# TIP-ABGABE MODUS (vor Deadline)
+# -------------------------------
+else:
+    st.subheader("Tipps abgeben")
+    name = st.text_input("Dein Name")
 
+    st.markdown("### 100m Männer")
+    hmme = st.text_input("Sieger:")
+    hmmz = st.text_input("Zweiter:")
+    hmmd = st.text_input("Dritter:")
 
+    st.markdown("### 100m Frauen")
+    hmwe = st.text_input("Siegerin:")
+    hmwz = st.text_input("Zweite:")
+    hmwd = st.text_input("Dritte:")
 
+    if st.button("Tipp abgeben"):
+        if name.strip() == "" or hmme.strip() == "" or hmmz.strip() == "" or hmmd.strip() == "" \
+           or hmwe.strip() == "" or hmwz.strip() == "" or hmwd.strip() == "":
+            st.error("Bitte alle Felder ausfüllen!")
+        else:
+            # Daten aus Sheet holen
+            data = sheet.get_all_records()
+            df = pd.DataFrame(data)
 
+            if not df.empty and "Name" in df.columns and name in df["Name"].values:
+                # Bestehende Zeile aktualisieren
+                idx = df.index[df["Name"] == name][0]
+                row_idx = idx + 2  # Header = 1
+                sheet.update_cell(row_idx, df.columns.get_loc("100mM1")+1, hmme)
+                sheet.update_cell(row_idx, df.columns.get_loc("100mM2")+1, hmmz)
+                sheet.update_cell(row_idx, df.columns.get_loc("100mM3")+1, hmmd)
+                sheet.update_cell(row_idx, df.columns.get_loc("100mW1")+1, hmwe)
+                sheet.update_cell(row_idx, df.columns.get_loc("100mW2")+1, hmwz)
+                sheet.update_cell(row_idx, df.columns.get_loc("100mW3")+1, hmwd)
+            else:
+                # Neue Zeile anfügen
+                sheet.append_row([name, hmme, hmmz, hmmd, hmwe, hmwz, hmwd, 0])  # Punkte=0 als Platzhalter
 
+            st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
 
 
