@@ -18,7 +18,7 @@ sheet = client.open_by_key(st.secrets["gspread"]["sheet_id"]).sheet1
 # -------------------------------
 deadline = datetime(2025, 9, 13, 0, 15)
 
-st.title("🏆 VFV Spandau: Das große Tippspiel")
+st.title("🏆 VFV Spandau: Das große Tippspiel","content")
 st.info(f"⏰ Tipps können bis **{deadline.strftime('%d.%m.%Y %H:%M')}** eingereicht werden.")
 
 # -------------------------------
@@ -26,9 +26,10 @@ st.info(f"⏰ Tipps können bis **{deadline.strftime('%d.%m.%Y %H:%M')}** einger
 # -------------------------------
 now = datetime.now()
 
-st.title("Dein Tip für die 100m Männer")
+
 if now < deadline:
     name = st.text_input("Dein Name")
+    st.title("Dein Tip für die 100m Männer")
     hmme = st.text_input("100m Männer Sieger:")
     hmmz = st.text_input("100m Männer Zweiter:")
     hmmd = st.text_input("100m Männer Dritter:") 
@@ -115,6 +116,7 @@ if not df.empty and "Punkte" in df.columns:
     st.dataframe(leaderboard.sort_values(by="Punkte", ascending=False))
 else:
     st.write("Noch keine Einträge im Leaderboard.")
+
 
 
 
