@@ -12,139 +12,80 @@ scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/au
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 sheet = client.open_by_key(st.secrets["gspread"]["sheet_id"]).sheet1
-#Deadline fürs Tippen
-# Abgabeschluss 
-deadline = datetime(2025, 9, 13, 00, 15)
+
 # -------------------------------
-# App-Titel
+# Abgabeschluss festlegen
 # -------------------------------
+deadline = datetime(2025, 9, 13, 0, 15)
+
 st.title("🏆 VFV Spandau: Das große Tippspiel")
+st.info(f"⏰ Tipps können bis **{deadline.strftime('%d.%m.%Y %H:%M')}** eingereicht werden.")
 
 # -------------------------------
-# Benutzereingaben
+# Benutzereingaben (nur bis Deadline)
 # -------------------------------
-name = st.text_input("Dein Name")
-hmme = st.text_input("100m Männer Sieger:")
-hmmz = st.text_input("100m Männer Zweiter:")
-hmmd = st.text_input("100m Männer Dritter:") #100m Männer
-hmwe = st.text_input("100m Frauen Siegerin:")
-hmwz = st.text_input("100m Frauen Zweite:")
-hmwd = st.text_input("100m Frauen Dritte:") #100m Frauen
-#hzmhme = st.text_input("110m Hürden Männer Sieger:")
-#hzmhmz = st.text_input("100m M Z:")
-#hzmhmd = st.text_input("100m M D:") #110m Hürden Männer
-#hmhwe = st.text_input("100m Hürde Frauen Siegerin:")
-#hmhwz = st.text_input("100m M Z:")
-#hmhwd = st.text_input("100m M D:") #100m Hürden Frauen
-#zmms= st.text_input("100m M S:")
-#zmmz = st.text_input("100m M Z:")
-#zmmd = st.text_input("100m M D:") #200m Männer
-#zmws = st.text_input("100m M S:")
-#zmwz = st.text_input("100m M Z:")
-#zmwd = st.text_input("100m M D:") #200m Frauen
-#vmms = st.text_input("100m M S:")
-#vmmz = st.text_input("100m M Z:")
-#vmmd = st.text_input("100m M D:") #400m Männer
-#vmwe = st.text_input("100m M S:")
-#vmwz = st.text_input("100m M Z:")
-#vmwd = st.text_input("100m M D:") #400m Frauen
+now = datetime.now()
 
+if now < deadline:
+    name = st.text_input("Dein Name")
+    hmme = st.text_input("100m Männer Sieger:")
+    hmmz = st.text_input("100m Männer Zweiter:")
+    hmmd = st.text_input("100m Männer Dritter:") 
+    hmwe = st.text_input("100m Frauen Siegerin:")
+    hmwz = st.text_input("100m Frauen Zweite:")
+    hmwd = st.text_input("100m Frauen Dritte:")
 
-if st.button("Tipp abgeben"):
-    now = datetime.now()
-
-    if now > deadline:
-        st.error("⏰ Abgabeschluss ist vorbei! Du kannst keine Tipps mehr abgeben.")
-    elif name.strip() == "" or hmme.strip() == "" or hmmz.strip() == "" or hmmd.strip() == "":
-        st.error("Bitte alle Felder ausfüllen!")
-    else:
-        # Tipp speichern (noch ohne Punkte)
-        sheet.append_row([name, hmme, hmmz, hmmd])
-        st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+    if st.button("Tipp abgeben"):
+        if name.strip() == "" or hmme.strip() == "" or hmmz.strip() == "" or hmmd.strip() == "" or hmwe.strip() == "" or hmwz.strip() == "" or hmwd.strip() == "":
+            st.error("⚠️ Bitte alle Felder ausfüllen!")
+        else:
+            sheet.append_row([name, hmme, hmmz, hmmd, 0])  # Punkte werden später berechnet
+            st.success(f"✅ Danke {name}, dein Tipp wurde gespeichert!")
+else:
+    st.warning("⏰ Die Abgabefrist ist vorbei! Du kannst keine Tipps mehr einreichen.")
 
 # -------------------------------
 # Punkteberechnung & Leaderboard-Update
 # -------------------------------
 if st.button("Auswerten"):
-    import sieger  # deine Datei mit den Siegern
+    import sieger  # Datei mit den Siegern
 
     hmm = [hmme, hmmz, hmmd]
     hmw = [hmwe, hmwz, hmwd]
     punkte = 0
 
-    # Punkteberechnung
-    if hmm[0] == sieger.ohmm[0]:
-        punkte += 2
-    if hmm[1] == sieger.ohmm[1]:
-        punkte += 2
-    if hmm[2] == sieger.ohmm[2]:
-        punkte += 2
+    # Punkte 100m Männer
+    if hmm[0] == sieger.ohmm[0]: punkte += 2
+    if hmm[1] == sieger.ohmm[1]: punkte += 2
+    if hmm[2] == sieger.ohmm[2]: punkte += 2
     for x in hmm:
-        if x in sieger.ohmm:
-            punkte += 1
-    #Punkte 100m Frauen
-    if hmw[0] == sieger.ohmw[0]:
-        punkte += 2
-    if hmw[1] == sieger.ohmw[1]:
-        punkte += 2
-    if hmw[2] == sieger.ohmw[2]:
-        punkte += 2
-    for x in hmw:
-        if x in sieger.ohmw:
-            punkte += 1
-    #Punkte 110m Hürden Männer
- #       if hmm[0] == sieger.ohmm[0]:
- #       punkte += 2
- #   if hmm[1] == sieger.ohmm[1]:
- #       punkte += 2
- #   if hmm[2] == sieger.ohmm[2]:
- #       punkte += 2
- #   for x in hmm:
- #       if x in sieger.ohmm:
- #           punkte += 1
-    #100m Hürden Frauen
- #       if hmm[0] == sieger.ohmm[0]:
- #       punkte += 2
- #   if hmm[1] == sieger.ohmm[1]:
- #       punkte += 2
- #   if hmm[2] == sieger.ohmm[2]:
- #       punkte += 2
- #   for x in hmm:
- #       if x in sieger.ohmm:
- #           punkte += 1
-    #100m Hürden Frauen
- #       if hmm[0] == sieger.ohmm[0]:
- #       punkte += 2
- #   if hmm[1] == sieger.ohmm[1]:
- #       punkte += 2
- #   if hmm[2] == sieger.ohmm[2]:
- #       punkte += 2
- #   for x in hmm:
- #      if x in sieger.ohmm:
- #           punkte += 1
+        if x in sieger.ohmm: punkte += 1
 
-    
+    # Punkte 100m Frauen
+    if hmw[0] == sieger.ohmw[0]: punkte += 2
+    if hmw[1] == sieger.ohmw[1]: punkte += 2
+    if hmw[2] == sieger.ohmw[2]: punkte += 2
+    for x in hmw:
+        if x in sieger.ohmw: punkte += 1
 
     st.success(f"{name}, du hast {punkte} Punkte!")
 
     # -------------------------------
     # Leaderboard aktualisieren
     # -------------------------------
-    # Bestehende Daten laden
     data = sheet.get_all_records()
     df = pd.DataFrame(data)
 
-    # Prüfen, ob der User schon existiert
     if not df.empty and "Name" in df.columns and name in df["Name"].values:
-        # Zeile aktualisieren
+        # Update vorhandene Punkte
         idx = df.index[df["Name"] == name][0]
         df.at[idx, "Punkte"] = punkte
-        # Sheet leeren und aktualisieren
+        # Sheet neu schreiben
         sheet.clear()
         sheet.update([df.columns.values.tolist()] + df.values.tolist())
     else:
-        # Neuer Eintrag
-        sheet.append_row([name, punkte])
+        # Neuer Eintrag mit Punkten
+        sheet.append_row([name, hmme, hmmz, hmmd, punkte])
 
 # -------------------------------
 # Leaderboard anzeigen
@@ -159,7 +100,6 @@ if not df.empty and "Punkte" in df.columns:
     st.dataframe(df.sort_values(by="Punkte", ascending=False))
 else:
     st.write("Noch keine Einträge im Leaderboard.")
-
 
 
 
