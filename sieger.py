@@ -12,7 +12,8 @@ Created on Tue Aug 26 14:04:09 2025
 #offhmmzwei="sevile"
 #offhmmdrei="Thompson"
 
-ohmm=["Lyles","Seville","Thompson"]
+ohmm=["","",""]
 ohmw=["Alfred","Clayton","Wood"]
+
 
 
