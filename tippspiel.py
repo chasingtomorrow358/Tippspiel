@@ -55,11 +55,11 @@ if st.button("Tipp abgeben"):
 
     if now > deadline:
         st.error("⏰ Abgabeschluss ist vorbei! Du kannst keine Tipps mehr abgeben.")
-    elif name.strip() == "" or a.strip() == "" or b.strip() == "" or c.strip() == "":
+    elif name.strip() == "" or hmme.strip() == "" or hmmz.strip() == "" or hmmd.strip() == "":
         st.error("Bitte alle Felder ausfüllen!")
     else:
         # Tipp speichern (noch ohne Punkte)
-        sheet.append_row([name, a, b, c])
+        sheet.append_row([name, hmme, hmmz, hmmd])
         st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
 
 # -------------------------------
@@ -159,6 +159,7 @@ if not df.empty and "Punkte" in df.columns:
     st.dataframe(df.sort_values(by="Punkte", ascending=False))
 else:
     st.write("Noch keine Einträge im Leaderboard.")
+
 
 
 
