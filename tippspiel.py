@@ -101,38 +101,24 @@ if st.button("Auswerten"):
 
     st.success(f"{name}, du hast {punkte} Punkte!")
 
+    # -------------------------------
     # Leaderboard aktualisieren
+    # -------------------------------
     data = sheet.get_all_records()
     df = pd.DataFrame(data)
 
     if not df.empty and "Name" in df.columns and name in df["Name"].values:
+        # Name existiert → nur die Punkte aktualisieren
         idx = df.index[df["Name"] == name][0]
         df.at[idx, "Punkte"] = punkte
+        # NaN → None konvertieren für gspread
         values = df.where(pd.notnull(df), None)
         sheet.clear()
         sheet.update([values.columns.values.tolist()] + values.values.tolist())
     else:
-        sheet.append_row([
-            name,
-            hmme, hmmz, hmmd,
-            hmwe, hmwz, hmwd,
-            punkte
-        ])
+        st.error("Fehler: Name nicht im Sheet gefunden. Bitte zuerst Tipp abgeben.")
 
-# -------------------------------
-# Leaderboard anzeigen
-# -------------------------------
-data = sheet.get_all_records()
-df = pd.DataFrame(data)
 
-st.subheader("🏅 Leaderboard")
-
-if not df.empty and "Punkte" in df.columns:
-    df["Punkte"] = pd.to_numeric(df["Punkte"], errors="coerce")
-    leaderboard = df[["Name", "Punkte"]]  # nur Name + Punkte
-    st.dataframe(leaderboard.sort_values(by="Punkte", ascending=False))
-else:
-    st.write("Noch keine Einträge im Leaderboard.")
 
 
 
