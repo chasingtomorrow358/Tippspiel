@@ -1,36 +1,51 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Tue Aug 26 13:48:31 2025
-
-@author: hoeni_wy8o0xn
-"""
 import streamlit as st
-import sieger
+import pandas as pd
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
 
-st.title("100m Männer Tippspiel")
+# Google Sheets Setup
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
+client = gspread.authorize(creds)
 
-# Eingabefelder
+# Öffne das Sheet
+sheet = client.open_by_key("DEINE_SHEET_ID").sheet1
+
+st.title("🏆 100m Männer Tippspiel mit Leaderboard")
+
+# Eingaben
+name = st.text_input("Dein Name")
 a = st.text_input("100m M S:")
 b = st.text_input("100m M Z:")
 c = st.text_input("100m M D:")
 
-# Eingaben in Liste speichern
-hmm = [a, b, c]
+if st.button("Auswerten"):
+    import sieger  # deine Datei mit den Siegern
 
-punkte = 0
+    hmm = [a, b, c]
+    punkte = 0
 
-if a and b and c:  # Nur auswerten, wenn alle Felder ausgefüllt
     if hmm[0] == sieger.ohmm[0]:
         punkte += 2
     if hmm[1] == sieger.ohmm[1]:
         punkte += 2
     if hmm[2] == sieger.ohmm[2]:
         punkte += 2
-    for name in hmm:
-        if name in sieger.ohmm:
+    for x in hmm:
+        if x in sieger.ohmm:
             punkte += 1
 
-    st.success(f"Du hast {punkte} Punkte!")
+    st.success(f"{name}, du hast {punkte} Punkte!")
+
+    # Punkte in Google Sheet eintragen
+    sheet.append_row([name, punkte])
+
+# Leaderboard aus Google Sheet laden
+data = sheet.get_all_records()
+df = pd.DataFrame(data)
+st.subheader("🏅 Leaderboard")
+st.dataframe(df.sort_values(by="Punkte", ascending=False))
+
 
 
 
