@@ -1,5 +1,6 @@
 import streamlit as st
 import gspread
+import pandas as pd
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 
@@ -63,6 +64,7 @@ else:
                 sheet.append_row([name, hmme, hmmz, hmmd, hmwe, hmwz, hmwd, 0])
 
             st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+
 
 
 
