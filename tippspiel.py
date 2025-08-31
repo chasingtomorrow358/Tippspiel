@@ -92,15 +92,15 @@ if st.button("Auswerten"):
     df = pd.DataFrame(data)
 
     if not df.empty and "Name" in df.columns and name in df["Name"].values:
-        # Update vorhandene Punkte
+        # Zeile aktualisieren
         idx = df.index[df["Name"] == name][0]
         df.at[idx, "Punkte"] = punkte
-        # Sheet neu schreiben
+        # Sheet leeren und aktualisieren
         sheet.clear()
         sheet.update([df.columns.values.tolist()] + df.values.tolist())
     else:
-        # Neuer Eintrag mit Punkten
-        sheet.append_row([name, hmme, hmmz, hmmd, punkte])
+        # Neuer Eintrag
+        sheet.append_row([name, hmme, hmmz, hmmd, hmwe, hmwz, hmwz, punkte])
 
 # -------------------------------
 # Leaderboard anzeigen
@@ -112,13 +112,10 @@ st.subheader("🏅 Leaderboard")
 
 if not df.empty and "Punkte" in df.columns:
     df["Punkte"] = pd.to_numeric(df["Punkte"], errors="coerce")
-    leaderboard = df[["Name", "Punkte"]]  # nur Name + Punkte anzeigen
+    leaderboard = df[["Name", "Punkte"]]  # nur Name + Punkte
     st.dataframe(leaderboard.sort_values(by="Punkte", ascending=False))
 else:
     st.write("Noch keine Einträge im Leaderboard.")
-
-
-
 
 
 
