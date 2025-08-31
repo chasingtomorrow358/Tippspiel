@@ -79,7 +79,7 @@ if now < deadline:
 # Punkteberechnung & Leaderboard-Update
 # -------------------------------
 if st.button("Auswerten"):
-    import sieger  # deine Datei mit den Siegern
+    import sieger  # Datei mit den Siegern
 
     hmm = [hmme, hmmz, hmmd]
     hmw = [hmwe, hmwz, hmwd]
@@ -133,6 +133,7 @@ if not df.empty and "Punkte" in df.columns:
     st.dataframe(leaderboard.sort_values(by="Punkte", ascending=False))
 else:
     st.write("Noch keine Einträge im Leaderboard.")
+
 
 
 
