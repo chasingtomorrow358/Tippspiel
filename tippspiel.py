@@ -35,7 +35,7 @@ if now < deadline:
     hmwz = st.text_input("100m Frauen Zweite:")
     hmwd = st.text_input("100m Frauen Dritte:")
 
- if st.button("Tipp abgeben"):
+if st.button("Tipp abgeben"):
     now = datetime.now()
 
     if now > deadline:
@@ -113,6 +113,7 @@ if not df.empty and "Punkte" in df.columns:
     st.dataframe(leaderboard.sort_values(by="Punkte", ascending=False))
 else:
     st.write("Noch keine Einträge im Leaderboard.")
+
 
 
 
