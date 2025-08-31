@@ -2,14 +2,19 @@ import streamlit as st
 import pandas as pd
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
+import json
 
-# Google Sheets Setup
+# Google Sheets Setup über Streamlit Secrets
+# In den Streamlit Secrets musst du deine gspread Credentials als Dictionary speichern
+gspread_creds = st.secrets["gspread"]
+creds_dict = json.loads(json.dumps(gspread_creds))  # Umwandeln in dict
+
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("tippspiel-470712-b9c0e104efbb.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 
 # Öffne das Sheet
-sheet = client.open_by_key("DEINE_SHEET_ID").sheet1
+sheet = client.open_by_key(st.secrets["sheet_id"]).sheet1  # sheet_id ebenfalls in Secrets speichern
 
 st.title("🏆 100m Männer Tippspiel mit Leaderboard")
 
@@ -45,8 +50,6 @@ data = sheet.get_all_records()
 df = pd.DataFrame(data)
 st.subheader("🏅 Leaderboard")
 st.dataframe(df.sort_values(by="Punkte", ascending=False))
-
-
 
 
 
