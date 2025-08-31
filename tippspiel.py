@@ -5,7 +5,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 # Google Sheets Setup
 scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name("tippspiel-470712-b9c0e104efbb.json", scope)
 client = gspread.authorize(creds)
 
 # Öffne das Sheet
@@ -45,6 +45,7 @@ data = sheet.get_all_records()
 df = pd.DataFrame(data)
 st.subheader("🏅 Leaderboard")
 st.dataframe(df.sort_values(by="Punkte", ascending=False))
+
 
 
 
