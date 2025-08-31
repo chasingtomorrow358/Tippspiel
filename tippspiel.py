@@ -26,11 +26,13 @@ st.info(f"⏰ Tipps können bis **{deadline.strftime('%d.%m.%Y %H:%M')}** einger
 # -------------------------------
 now = datetime.now()
 
+st.title("Dein Tip für die 100m Männer")
 if now < deadline:
     name = st.text_input("Dein Name")
     hmme = st.text_input("100m Männer Sieger:")
     hmmz = st.text_input("100m Männer Zweiter:")
     hmmd = st.text_input("100m Männer Dritter:") 
+    st.title("Dein Tip für die 100m Frauen")
     hmwe = st.text_input("100m Frauen Siegerin:")
     hmwz = st.text_input("100m Frauen Zweite:")
     hmwd = st.text_input("100m Frauen Dritte:")
@@ -113,6 +115,7 @@ if not df.empty and "Punkte" in df.columns:
     st.dataframe(leaderboard.sort_values(by="Punkte", ascending=False))
 else:
     st.write("Noch keine Einträge im Leaderboard.")
+
 
 
 
