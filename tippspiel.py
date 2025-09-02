@@ -1,6 +1,6 @@
 import streamlit as st
-import gspread
 import pandas as pd
+import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from datetime import datetime
 
@@ -8,7 +8,8 @@ from datetime import datetime
 # Google Sheets Setup
 # -------------------------------
 creds_dict = st.secrets["gspread"]
-scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+scope = ["https://spreadsheets.google.com/feeds",
+         "https://www.googleapis.com/auth/drive"]
 creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 sheet = client.open_by_key(st.secrets["gspread"]["sheet_id"]).sheet1
@@ -21,7 +22,6 @@ st.title("🏆 VFV Spandau Tippspiel - Tipps abgeben")
 st.info(f"⏰ Tipps können bis **{deadline.strftime('%d.%m.%Y %H:%M')}** eingereicht werden.")
 
 now = datetime.now()
-
 if now >= deadline:
     st.warning("Die Tipp-Abgabe ist vorbei. Dieses Skript ist nur für die Eingabe vor Deadline.")
 else:
@@ -30,149 +30,41 @@ else:
     # -------------------------------
     name = st.text_input("Dein Name")
 
-    st.markdown("### 100m Männer")
-    hmme = st.text_input("Sieger 100m Männer:")
-    hmmz = st.text_input("Zweiter 100m Männer:")
-    hmmd = st.text_input("Dritter 100m Männer:")
+    # Disziplinen (nur Tippfelder)
+    disziplinen = [
+        "100mM", "100mW", "200mM", "1500mM", "HindernisM",
+        "Diskus", "Stab", "Speer", "Zehnkampf", "100mHürdenW",
+        "400mHürdenW", "800mW", "Weitsprung", "Hochsprung",
+        "Kugel", "Staffel100mM", "Staffel100mW", "Staffel400mM",
+        "Staffel400mW"
+    ]
 
-    st.markdown("### 100m Frauen")
-    hmwe = st.text_input("Siegerin 100m Frauen:")
-    hmwz = st.text_input("Zweite 100m Frauen:")
-    hmwd = st.text_input("Dritte 100m Frauen:")
+    tipp_felder = {}
+    for d in disziplinen:
+        st.markdown(f"### {d}")
+        tipp_felder[f"{d}1"] = st.text_input(f"Sieger {d}:")
+        tipp_felder[f"{d}2"] = st.text_input(f"Zweiter {d}:")
+        tipp_felder[f"{d}3"] = st.text_input(f"Dritter {d}:")
 
-    st.markdown("### 200m Männer")
-    m200_1 = st.text_input("Sieger 200m Männer:")
-    m200_2 = st.text_input("Zweiter 200m Männer:")
-    m200_3 = st.text_input("Dritter 200m Männer:")
-
-    st.markdown("### 1500m Männer")
-    m1500_1 = st.text_input("Sieger 1500m Männer:")
-    m1500_2 = st.text_input("Zweiter 1500m Männer:")
-    m1500_3 = st.text_input("Dritter 1500m Männer:")
-
-    st.markdown("### 3000m Hindernis Männer")
-    hind_1 = st.text_input("Sieger Hindernis Männer:")
-    hind_2 = st.text_input("Zweiter Hindernis Männer:")
-    hind_3 = st.text_input("Dritter Hindernis Männer:")
-
-    st.markdown("### Diskus Männer")
-    diskus_1 = st.text_input("Sieger Diskus:")
-    diskus_2 = st.text_input("Zweiter Diskus:")
-    diskus_3 = st.text_input("Dritter Diskus:")
-
-    st.markdown("### Stabhochsprung Männer")
-    stab_1 = st.text_input("Sieger Stabhochsprung:")
-    stab_2 = st.text_input("Zweiter Stabhochsprung:")
-    stab_3 = st.text_input("Dritter Stabhochsprung:")
-
-    st.markdown("### Speer Männer")
-    speer_1 = st.text_input("Sieger Speer:")
-    speer_2 = st.text_input("Zweiter Speer:")
-    speer_3 = st.text_input("Dritter Speer:")
-
-    st.markdown("### Zehnkampf")
-    zehn_1 = st.text_input("Sieger Zehnkampf:")
-    zehn_2 = st.text_input("Zweiter Zehnkampf:")
-    zehn_3 = st.text_input("Dritter Zehnkampf:")
-
-    st.markdown("### 100m Hürden Frauen")
-    h100w_1 = st.text_input("Siegerin 100m Hürden Frauen:")
-    h100w_2 = st.text_input("Zweite 100m Hürden Frauen:")
-    h100w_3 = st.text_input("Dritte 100m Hürden Frauen:")
-
-    st.markdown("### 400m Hürden Frauen")
-    h400w_1 = st.text_input("Siegerin 400m Hürden Frauen:")
-    h400w_2 = st.text_input("Zweite 400m Hürden Frauen:")
-    h400w_3 = st.text_input("Dritte 400m Hürden Frauen:")
-
-    st.markdown("### 800m Frauen")
-    f800_1 = st.text_input("Siegerin 800m Frauen:")
-    f800_2 = st.text_input("Zweite 800m Frauen:")
-    f800_3 = st.text_input("Dritte 800m Frauen:")
-
-    st.markdown("### Weitsprung Frauen")
-    weitsprung_1 = st.text_input("Sieger Weitsprung:")
-    weitsprung_2 = st.text_input("Zweiter Weitsprung:")
-    weitsprung_3 = st.text_input("Dritter Weitsprung:")
-
-    st.markdown("### Hochsprung Frauen")
-    hoch_1 = st.text_input("Sieger Hochsprung:")
-    hoch_2 = st.text_input("Zweiter Hochsprung:")
-    hoch_3 = st.text_input("Dritter Hochsprung:")
-
-    st.markdown("### Kugelstoßen Frauen")
-    kugel_1 = st.text_input("Sieger Kugelstoßen:")
-    kugel_2 = st.text_input("Zweiter Kugelstoßen:")
-    kugel_3 = st.text_input("Dritter Kugelstoßen:")
-
-    st.markdown("### 4x100m Staffel Männer")
-    staffel100m_1 = st.text_input("Sieger 4x100m Männer:")
-    staffel100m_2 = st.text_input("Zweiter 4x100m Männer:")
-    staffel100m_3 = st.text_input("Dritter 4x100m Männer:")
-
-    st.markdown("### 4x100m Staffel Frauen")
-    staffel100w_1 = st.text_input("Sieger 4x100m Frauen:")
-    staffel100w_2 = st.text_input("Zweite 4x100m Frauen:")
-    staffel100w_3 = st.text_input("Dritte 4x100m Frauen:")
-
-    st.markdown("### 4x400m Staffel Männer")
-    staffel400m_1 = st.text_input("Sieger 4x400m Männer:")
-    staffel400m_2 = st.text_input("Zweiter 4x400m Männer:")
-    staffel400m_3 = st.text_input("Dritter 4x400m Männer:")
-
-    st.markdown("### 4x400m Staffel Frauen")
-    staffel400w_1 = st.text_input("Sieger 4x400m Frauen:")
-    staffel400w_2 = st.text_input("Zweite 4x400m Frauen:")
-    staffel400w_3 = st.text_input("Dritte 4x400m Frauen:")
-
-    # -------------------------------
-    # Tipp speichern
-    # -------------------------------
     if st.button("Tipp abgeben"):
-        if (
-            name.strip() == "" or hmme.strip() == "" or hmmz.strip() == "" or hmmd.strip() == ""
-            or hmwe.strip() == "" or hmwz.strip() == "" or hmwd.strip() == ""
-        ):
+        # Alle Felder prüfen
+        if name.strip() == "" or any(v.strip() == "" for v in tipp_felder.values()):
             st.error("Bitte alle Felder ausfüllen!")
         else:
+            # Google Sheet auslesen
             data = sheet.get_all_records()
             df = pd.DataFrame(data)
 
+            # Prüfen, ob Teilnehmer schon existiert
             if not df.empty and "Name" in df.columns and name in df["Name"].values:
-                # Zeile aktualisieren
                 idx = df.index[df["Name"] == name][0]
-                row_idx = idx + 2
-                sheet.update_cell(row_idx, df.columns.get_loc("100mM1")+1, hmme)
-                sheet.update_cell(row_idx, df.columns.get_loc("100mM2")+1, hmmz)
-                sheet.update_cell(row_idx, df.columns.get_loc("100mM3")+1, hmmd)
-                sheet.update_cell(row_idx, df.columns.get_loc("100mW1")+1, hmwe)
-                sheet.update_cell(row_idx, df.columns.get_loc("100mW2")+1, hmwz)
-                sheet.update_cell(row_idx, df.columns.get_loc("100mW3")+1, hmwd)
+                row_idx = idx + 2  # Sheet-Zeilen beginnen bei 1 und Kopfzeile bei 1
+                for col, val in tipp_felder.items():
+                    col_idx = df.columns.get_loc(col) + 1
+                    sheet.update_cell(row_idx, col_idx, val)
             else:
-                # Neue Zeile einfügen
-                sheet.append_row([
-                    name,
-                    hmme, hmmz, hmmd,  # 100m Männer
-                    hmwe, hmwz, hmwd,  # 100m Frauen
-                    m200_1, m200_2, m200_3,
-                    m1500_1, m1500_2, m1500_3,
-                    hind_1, hind_2, hind_3,
-                    diskus_1, diskus_2, diskus_3,
-                    stab_1, stab_2, stab_3,
-                    speer_1, speer_2, speer_3,
-                    zehn_1, zehn_2, zehn_3,
-                    h100w_1, h100w_2, h100w_3,
-                    h400w_1, h400w_2, h400w_3,
-                    f800_1, f800_2, f800_3,
-                    weitsprung_1, weitsprung_2, weitsprung_3,
-                    hoch_1, hoch_2, hoch_3,
-                    kugel_1, kugel_2, kugel_3,
-                    staffel100m_1, staffel100m_2, staffel100m_3,
-                    staffel100w_1, staffel100w_2, staffel100w_3,
-                    staffel400m_1, staffel400m_2, staffel400m_3,
-                    staffel400w_1, staffel400w_2, staffel400w_3,
-                    0  # Punkte
-                ])
+                # Neue Zeile erstellen
+                neue_zeile = [name] + list(tipp_felder.values()) + [0]  # Punkte = 0
+                sheet.append_row(neue_zeile)
 
             st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
-
