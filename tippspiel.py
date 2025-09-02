@@ -23,14 +23,14 @@ st.info(f"⏰ Tipps können bis **{deadline.strftime('%d.%m.%Y %H:%M')}** einger
 now = datetime.now()
 
 if now >= deadline:
-    st.warning("Die Tipp-Abgabe ist vorbei. Dieses Skript ist nur für die Eingabe vor Deadline.")
+st.warning("Die Tipp-Abgabe ist vorbei. Dieses Skript ist nur für die Eingabe vor Deadline.")
 else:
     # -------------------------------
     # Benutzereingaben
     # -------------------------------
     name = st.text_input("Dein Name")
 
-   st.markdown("### 100m Männer")
+st.markdown("### 100m Männer")
 hmme = st.text_input("Sieger 100m Männer:")
 hmmz = st.text_input("Zweiter 100m Männer:")
 hmmd = st.text_input("Dritter 100m Männer:")
@@ -173,6 +173,7 @@ staffel400w_3 = st.text_input("Dritte 4x400m Frauen:")
 )
 
             st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+
 
 
 
