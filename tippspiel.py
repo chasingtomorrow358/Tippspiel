@@ -46,7 +46,7 @@ else:
         tipp_felder[f"{d}2"] = st.text_input(f"Zweiter {d}:")
         tipp_felder[f"{d}3"] = st.text_input(f"Dritter {d}:")
 
-    if st.button("Tipp abgeben"):
+if st.button("Tipp abgeben"):
     # Prüfen, ob alle Felder ausgefüllt sind
     required_fields = [
         hmme, hmmz, hmmd, hmwe, hmwz, hmwd,
@@ -111,4 +111,5 @@ else:
             sheet.append_row(neue_zeile)
 
         st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+
 
