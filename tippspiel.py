@@ -22,6 +22,7 @@ st.title("🏆 VFV Spandau Tippspiel - Tipps abgeben")
 st.info(f"⏰ Tipps können bis **{deadline.strftime('%d.%m.%Y %H:%M')}** eingereicht werden.")
 st.info("""Bei Leuten, bei denen der Vorname öfters im Verein vorkommt, bitte noch den Nachnamen oder einen Spitznamen eintragen.
 Ihr könnt eure Tipps bis Ende der Deadline jederzeit ändern, müsst dann aber leider die ganze Eingabe wiederholen.
+Die Athleten die sich Qualifiziert habe könnt Ihr hier nachschauen: "[World Athletics – Road to](https://worldathletics.org/stats-zone/road-to/7190593)"
 🍀 Viel Glück und viel Spaß""")
 
 
@@ -75,6 +76,7 @@ else:
                 sheet.append_row(neue_zeile)
 
             st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+
 
 
 
