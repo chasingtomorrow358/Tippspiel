@@ -55,17 +55,17 @@ else:
     hind_2 = st.text_input("Zweiter Hindernis Männer:")
     hind_3 = st.text_input("Dritter Hindernis Männer:")
 
-    st.markdown("### Diskus")
+    st.markdown("### Diskus Männer")
     diskus_1 = st.text_input("Sieger Diskus:")
     diskus_2 = st.text_input("Zweiter Diskus:")
     diskus_3 = st.text_input("Dritter Diskus:")
 
-    st.markdown("### Stabhochsprung")
+    st.markdown("### Stabhochsprung Männer")
     stab_1 = st.text_input("Sieger Stabhochsprung:")
     stab_2 = st.text_input("Zweiter Stabhochsprung:")
     stab_3 = st.text_input("Dritter Stabhochsprung:")
 
-    st.markdown("### Speer")
+    st.markdown("### Speer Männer")
     speer_1 = st.text_input("Sieger Speer:")
     speer_2 = st.text_input("Zweiter Speer:")
     speer_3 = st.text_input("Dritter Speer:")
@@ -90,17 +90,17 @@ else:
     f800_2 = st.text_input("Zweite 800m Frauen:")
     f800_3 = st.text_input("Dritte 800m Frauen:")
 
-    st.markdown("### Weitsprung")
+    st.markdown("### Weitsprung Frauen")
     weitsprung_1 = st.text_input("Sieger Weitsprung:")
     weitsprung_2 = st.text_input("Zweiter Weitsprung:")
     weitsprung_3 = st.text_input("Dritter Weitsprung:")
 
-    st.markdown("### Hochsprung")
+    st.markdown("### Hochsprung Frauen")
     hoch_1 = st.text_input("Sieger Hochsprung:")
     hoch_2 = st.text_input("Zweiter Hochsprung:")
     hoch_3 = st.text_input("Dritter Hochsprung:")
 
-    st.markdown("### Kugelstoßen")
+    st.markdown("### Kugelstoßen Frauen")
     kugel_1 = st.text_input("Sieger Kugelstoßen:")
     kugel_2 = st.text_input("Zweiter Kugelstoßen:")
     kugel_3 = st.text_input("Dritter Kugelstoßen:")
@@ -175,3 +175,4 @@ else:
                 ])
 
             st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+
