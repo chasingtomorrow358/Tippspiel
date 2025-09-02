@@ -23,7 +23,7 @@ st.info(f"⏰ Tipps können bis **{deadline.strftime('%d.%m.%Y %H:%M')}** einger
 now = datetime.now()
 
 if now >= deadline:
-st.warning("Die Tipp-Abgabe ist vorbei. Dieses Skript ist nur für die Eingabe vor Deadline.")
+    st.warning("Die Tipp-Abgabe ist vorbei. Dieses Skript ist nur für die Eingabe vor Deadline.")
 else:
     # -------------------------------
     # Benutzereingaben
@@ -173,6 +173,7 @@ staffel400w_3 = st.text_input("Dritte 4x400m Frauen:")
 )
 
             st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+
 
 
 
