@@ -37,11 +37,11 @@ else:
 
     # Disziplinen
     disziplinen = [
-        "100m Männer", "100mW", "200mM", "1500mM", "HindernisM",
-        "Diskus", "Stab", "Speer", "Zehnkampf", "100mHürdenW",
-        "400mHürdenW", "800mW", "Weitsprung", "Hochsprung",
-        "Kugel", "Staffel100mM", "Staffel100mW", "Staffel400mM",
-        "Staffel400mW"
+        "100m Männer", "100m Frauen", "200m Männer", "1500m Männer", "Hindernis Männer",
+        "Diskus Männer", "Stab Männer", "Speer Männer", "Zehnkampf", "100m Hürden Frauen",
+        "400m Hürden Frauen", "800m Frauen", "Weitsprung Frauen", "Hochsprung Frauen",
+        "Kugel Frauen", "Staffel 100m Männer", "Staffel 100m Frauen", "Staffel 400m Männer",
+        "Staffel 400m Frauen"
     ]
 
     # Tipp-Felder dynamisch erstellen
@@ -75,6 +75,7 @@ else:
                 sheet.append_row(neue_zeile)
 
             st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+
 
 
 
