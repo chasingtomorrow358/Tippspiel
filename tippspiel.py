@@ -21,8 +21,7 @@ deadline = datetime(2025, 9, 12, 23, 59)
 st.title("🏆 VFV Spandau Tippspiel - Tipps abgeben")
 st.info(f"⏰ Tipps können bis **{deadline.strftime('%d.%m.%Y %H:%M')}** eingereicht werden.")
 st.info("""Bei Leuten, bei denen der Vorname öfters im Verein vorkommt, bitte noch den Nachnamen oder einen Spitznamen eintragen.
-Für das Tippspiel nur die Nachnamen der jeweiligen Personen eintragen!
-Ihr könnt eure Tipps bis Ende der Deadline jederzeit ändern, müsst aber leider die ganze Eingabe wiederholen.
+Ihr könnt eure Tipps bis Ende der Deadline jederzeit ändern, müsst dann aber leider die ganze Eingabe wiederholen.
 🍀 Viel Glück und viel Spaß""")
 
 
@@ -34,6 +33,7 @@ else:
     # Benutzereingaben
     # -------------------------------
     name = st.text_input("Dein Name")
+    st.info("Für das Tippspiel nur die Nachnamen der jeweiligen Personen eintragen!")
 
     # Disziplinen
     disziplinen = [
@@ -75,6 +75,7 @@ else:
                 sheet.append_row(neue_zeile)
 
             st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+
 
 
 
