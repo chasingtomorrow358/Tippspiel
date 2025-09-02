@@ -20,10 +20,12 @@ sheet = client.open_by_key(st.secrets["gspread"]["sheet_id"]).sheet1
 deadline = datetime(2025, 9, 12, 23, 59)
 st.title("🏆 VFV Spandau Tippspiel - Tipps abgeben")
 st.info(f"⏰ Tipps können bis **{deadline.strftime('%d.%m.%Y %H:%M')}** eingereicht werden.")
+st.info("Bei Leuten, bei denen der Vorname öfters im Verein vorkommt, bitte noch den Nachnamen oder einen Spitznamen eintragen"/n"Für das Tippspiel nur die Nachnamen der jeweiligen Personen eintragen!"/n"Ihr könnt eure Tipps bis 
+bis Ende der Deadline jederzeit ändern, müsst aber leider die ganze Eingabe wiederholen" /n"🍀 Viel Glück und viel Spaß")
 
 now = datetime.now()
 if now >= deadline:
-    st.warning("Die Tipp-Abgabe ist vorbei. Dieses Skript ist nur für die Eingabe vor Deadline.")
+    st.warning("❌ Die Tipp-Abgabe ist vorbei")
 else:
     # -------------------------------
     # Benutzereingaben
@@ -32,7 +34,7 @@ else:
 
     # Disziplinen
     disziplinen = [
-        "100mM", "100mW", "200mM", "1500mM", "HindernisM",
+        "100m Männer", "100mW", "200mM", "1500mM", "HindernisM",
         "Diskus", "Stab", "Speer", "Zehnkampf", "100mHürdenW",
         "400mHürdenW", "800mW", "Weitsprung", "Hochsprung",
         "Kugel", "Staffel100mM", "Staffel100mW", "Staffel400mM",
@@ -70,3 +72,4 @@ else:
                 sheet.append_row(neue_zeile)
 
             st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+
