@@ -38,10 +38,10 @@ else:
 
     # Disziplinen
     disziplinen = [
-        "100m Männer", "100m Frauen", "200m Männer", "1500m Männer", "Hindernis Männer",
-        "Diskus Männer", "Stab Männer", "Speer Männer", "Zehnkampf", "100m Hürden Frauen",
-        "400m Hürden Frauen", "800m Frauen", "Weitsprung Frauen", "Hochsprung Frauen",
-        "Kugel Frauen", "Staffel 100m Männer", "Staffel 100m Frauen", "Staffel 400m Männer",
+        "100m Männer", "200m Männer", "1500m Männer", 
+        "Speer Männer", "Zehnkampf",  "100m Frauen", "100m Hürden Frauen",
+        "400m Hürden Frauen", "Weitsprung Frauen", "Hochsprung Frauen",
+        "Staffel 100m Männer", "Staffel 100m Frauen", "Staffel 400m Männer",
         "Staffel 400m Frauen"
     ]
 
@@ -76,6 +76,7 @@ else:
                 sheet.append_row(neue_zeile)
 
             st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+
 
 
 
