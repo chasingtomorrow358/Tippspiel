@@ -34,7 +34,8 @@ else:
     # Benutzereingaben
     # -------------------------------
     name = st.text_input("Dein Name")
-    st.info("Für das Tippspiel nur die Nachnamen der jeweiligen Personen eintragen!")
+    st.info("""Für das Tippspiel nur die Nachnamen der jeweiligen Personen eintragen!
+    Bei den Staffel reichen die Abkürzungen USA und UK""")
 
     # Disziplinen
     disziplinen = [
@@ -76,6 +77,7 @@ else:
                 sheet.append_row(neue_zeile)
 
             st.success(f"Danke {name}, dein Tipp wurde gespeichert!")
+
 
 
 
